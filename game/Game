@@ -1,0 +1,83 @@
+package game;
+
+import exceptions.AnimalChessException;
+import pieces.*;
+
+public class Game {
+
+    int HEIGHT = 4;
+    int WIDTH = 3;
+
+    Player zero;
+    Player one;
+
+    int rows;
+    int cols;
+
+    /**
+     * @param p0
+     * @param p1
+     */
+    public Game(Player p0, Player p1) {
+        zero = p0;
+        one = p1;
+
+        //New 2D Array for Board
+        Square.board = new Square[HEIGHT][WIDTH];
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                Square.board[i][j] = new Square(this, i, j);
+            }
+        }
+
+        //FILL IN INITIAL POSITIONS
+        try {
+            Giraffe g0 = new Giraffe(zero, Square.board[0][0]);
+            Giraffe g1 = new Giraffe(one, Square.board[3][2]);
+            Lion l0 = new Lion(zero, Square.board[0][1]);
+            Lion l1 = new Lion(one, Square.board[3][1]);
+            Elephant e0 = new Elephant(zero, Square.board[0][2]);
+            Elephant e1 = new Elephant(one, Square.board[3][0]);
+            Chick c0 = new Chick(zero, Square.board[1][1]);
+            Chick c1 = new Chick(one, Square.board[2][1]);
+
+        } catch (AnimalChessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //RETURN PLAYER NUMBER
+    public Player getPlayer(int playerNumber) {
+        if (playerNumber == 0) {
+            return zero;
+        } else if (playerNumber == 1) {
+            return one;
+        } else {
+            throw new IllegalArgumentException("Not a Valid Player!");
+        }
+    }
+
+    //Return Winner
+    public Player getWinner() {
+        if (zero.hasWon()) {
+            return zero;
+        } else if (one.hasWon()) {
+            return one;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param row
+     * @param col
+     * @return
+     */
+    public static Square getSquare(int row, int col) {
+        return Square.board[row][col];
+    }
+
+    public void getLionWinner() {
+        getWinner().winGame();
+    }
+}
